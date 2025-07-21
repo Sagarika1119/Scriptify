@@ -31,21 +31,97 @@ const buildOptions = [
 ];
 
 const languages = [
-  { name: "Python", icon: <FaPython className="text-3xl text-blue-400" />, likes: "5.2K", users: "42M" },
-  { name: "HTML, CSS, JS", icon: <FaHtml5 className="text-3xl text-orange-400" />, likes: "2.8K", users: "12.8M" },
-  { name: "Node.js", icon: <FaNodeJs className="text-3xl text-green-400" />, likes: "829", users: "7.7M" },
-  { name: "C++", icon: <SiCplusplus className="text-3xl text-blue-300" />, likes: "959", users: "6.3M" },
-  { name: "C", icon: <FaCuttlefish className="text-3xl text-gray-300" />, likes: "604", users: "5.7M" },
-  { name: "Java", icon: <FaJava className="text-3xl text-orange-300" />, likes: "934", users: "5.5M" },
-  { name: "C#", icon: <SiCsharp className="text-3xl text-purple-400" />, likes: "-", users: "-" },
-  { name: "Bash", icon: <FaTerminal className="text-3xl text-green-200" />, likes: "-", users: "-" },
-  { name: "PHP Web", icon: <FaPhp className="text-3xl text-indigo-400" />, likes: "-", users: "-" },
-  { name: "Blank Repl", icon: <FaCode className="text-3xl text-gray-400" />, likes: "-", users: "-" },
-  { name: "React JavaScript", icon: <FaReact className="text-3xl text-cyan-400" />, likes: "-", users: "-" },
-  { name: "JavaScript", icon: <FaJs className="text-3xl text-yellow-300" />, likes: "-", users: "-" },
+  {
+    name: "Python",
+    icon: <FaPython className="text-3xl text-blue-400" />,
+    likes: "5.2K",
+    users: "42M",
+    boilerplate: "print('Hello, Scriptify!')\n",
+  },
+  {
+    name: "HTML, CSS, JS",
+    icon: <FaHtml5 className="text-3xl text-orange-400" />,
+    likes: "2.8K",
+    users: "12.8M",
+    boilerplate: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Hello Scriptify</title>\n</head>\n<body>\n  <h1>Hello, Scriptify!</h1>\n</body>\n</html>\n`,
+  },
+  {
+    name: "Node.js",
+    icon: <FaNodeJs className="text-3xl text-green-400" />,
+    likes: "829",
+    users: "7.7M",
+    boilerplate: "console.log('Hello, Scriptify!');\n",
+  },
+  {
+    name: "C++",
+    icon: <SiCplusplus className="text-3xl text-blue-300" />,
+    likes: "959",
+    users: "6.3M",
+    boilerplate: "#include <iostream>\nint main() { std::cout << \"Hello, Scriptify!\\n\"; return 0; }\n",
+  },
+  {
+    name: "C",
+    icon: <FaCuttlefish className="text-3xl text-gray-300" />,
+    likes: "604",
+    users: "5.7M",
+    boilerplate: "#include <stdio.h>\nint main() { printf(\"Hello, Scriptify!\\n\"); return 0; }\n",
+  },
+  {
+    name: "Java",
+    icon: <FaJava className="text-3xl text-orange-300" />,
+    likes: "934",
+    users: "5.5M",
+    boilerplate: "public class Main { public static void main(String[] args) { System.out.println(\"Hello, Scriptify!\"); } }\n",
+  },
+  {
+    name: "C#",
+    icon: <SiCsharp className="text-3xl text-purple-400" />,
+    likes: "-",
+    users: "-",
+    boilerplate: "using System;\nclass Program { static void Main() { Console.WriteLine(\"Hello, Scriptify!\"); } }\n",
+  },
+  {
+    name: "Bash",
+    icon: <FaTerminal className="text-3xl text-green-200" />,
+    likes: "-",
+    users: "-",
+    boilerplate: "echo 'Hello, Scriptify!'\n",
+  },
+  {
+    name: "PHP Web",
+    icon: <FaPhp className="text-3xl text-indigo-400" />,
+    likes: "-",
+    users: "-",
+    boilerplate: "<?php\necho 'Hello, Scriptify!';\n",
+  },
+  {
+    name: "Blank Repl",
+    icon: <FaCode className="text-3xl text-gray-400" />,
+    likes: "-",
+    users: "-",
+    boilerplate: "",
+  },
+  {
+    name: "React JavaScript",
+    icon: <FaReact className="text-3xl text-cyan-400" />,
+    likes: "-",
+    users: "-",
+    boilerplate: `import React from 'react';\nexport default function App() {\n  return <h1>Hello, Scriptify!</h1>;\n}\n`,
+  },
+  {
+    name: "JavaScript",
+    icon: <FaJs className="text-3xl text-yellow-300" />,
+    likes: "-",
+    users: "-",
+    boilerplate: "console.log('Hello, Scriptify!');\n",
+  },
 ];
 
-export default function TemplatesPanel() {
+type Props = {
+  onCreateApp?: (app: { template: any; title: string; privacy: string; boilerplate: string }) => void;
+};
+
+export default function TemplatesPanel({ onCreateApp }: Props) {
   return (
     <div className="w-full max-w-6xl mx-auto mt-12 pb-12">
       <h2 className="text-4xl font-bold mb-2">Templates</h2>
@@ -65,7 +141,15 @@ export default function TemplatesPanel() {
       <div className="w-full overflow-x-auto">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 min-w-[700px]">
           {languages.map((lang) => (
-            <div key={lang.name} className="bg-[#232323] rounded-xl p-4 flex flex-col items-center hover:bg-[#232323]/80 transition cursor-pointer shadow-md hover:shadow-xl">
+            <div
+              key={lang.name}
+              className="bg-[#232323] rounded-xl p-4 flex flex-col items-center hover:bg-[#232323]/80 transition cursor-pointer shadow-md hover:shadow-xl"
+              onClick={() => {
+                if (onCreateApp) {
+                  onCreateApp({ template: lang, title: lang.name, privacy: "public", boilerplate: lang.boilerplate });
+                }
+              }}
+            >
               <div className="mb-2">{lang.icon}</div>
               <div className="font-semibold mb-1 text-center text-white">{lang.name}</div>
               <div className="flex items-center text-xs text-gray-400 gap-2">
